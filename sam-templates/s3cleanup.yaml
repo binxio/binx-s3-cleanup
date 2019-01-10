@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: S3 bucket cleanup function
+
+Resources:
+  S3CleanupLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: s3_cleanup.handler
+      Runtime: python3.7
+      Timeout: 30
+      CodeUri:
+      Environment:
+        Variables:
+          REGION: 'eu-west-1'
+      Events:
+        DailySchedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)

@@ -1,0 +1,9 @@
+*.pyc
+.idea
+.vscode
+.DS_*
+dist/lambda.zip
+.vimrc
+*.swap
+*.swp
+/.aws-sam/
