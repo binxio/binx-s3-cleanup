@@ -7,7 +7,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: s3_cleanup.handler
-      Runtime: python3.7
+      Runtime: python3.6
       Timeout: 30
       CodeUri:
       Environment:
@@ -18,3 +18,24 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: rate(1 day)
+      Role: !GetAtt LambdaS3Role.Arn
+  LambdaS3Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service:
+            - "lambda.amazonaws.com"
+          Action:
+          - "sts:AssumeRole"
+      Policies:
+      - PolicyName: "root"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: "Allow"
+            Action: "s3:*"
+            Resource: "*"

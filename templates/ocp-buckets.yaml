@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Several s3 bucket with and without tags
+
+Parameters:
+  Environment:
+    Description: The environment used in the makefile for prefixing the bucket names
+    Type: String
+
+Resources:
+  Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-s3-cleanup-bucket1'
+      Tags:
+        -
+          Key: 'owner'
+          Value: 'ocp'
+        -
+          Key: 'at'
+          Value: 'deploy'
+
+  Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-s3-cleanup-bucket2'
+      Tags:
+      -
+        Key: 'owner'
+        Value: 'ocp'
+      -
+        Key: 'at'
+        Value: 'delete'
+
+  Bucket3:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-s3-cleanup-bucket3'
+      Tags:
+      - Key: 'owner'
+        Value: 'ocp'
+
+  Bucket4:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-s3-cleanup-bucket4'
+      Tags:
+        -
+          Key: 'owner'
+          Value: 'bojack'
+
+  Bucket5:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-s3-cleanup-bucket5'
