@@ -23,13 +23,15 @@ Resources:
     Type: AWS::IAM::Role
   S3CleanupLambda:
     Properties:
-      CodeUri: s3://binx-cleanup-lambda/1ecd1301f8a3b1a44ba59351e0e32de7
+      CodeUri: s3://binx-cleanup-lambda/e5a9d1b4bb4f2816e10df05f209eba81
       Environment:
         Variables:
           REGION: eu-west-1
       Events:
         DailySchedule:
           Properties:
+            Input: '[ { "owner": "ocp", "at": "delete" }, { "owner": "ocp", "prod":
+              "delete" } ]'
             Schedule: rate(1 day)
           Type: Schedule
       Handler: s3_cleanup.handler
