@@ -42,7 +42,6 @@ deployment-bucket:
 	@sceptre launch $(ENVIRONMENT)/eu/bucket.yaml
 
 build:
-	export AWS_PROFILE=$(ENVIRONMENT)
 	sam build \
 		-s lambdas/ \
 		-t sam-templates/s3cleanup.yaml \
@@ -50,7 +49,6 @@ build:
 		--use-container
 
 package:
-	export AWS_PROFILE=$(ENVIRONMENT)
 	sam package \
 		--output-template-file templates/s3cleanup.yaml \
 		--s3-bucket $(BUCKET_NAME)
