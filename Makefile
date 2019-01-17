@@ -1,4 +1,4 @@
-.PHONY: help launch deploy redeploy remake-buckets upload-content cleanup-test-content cleanup-deployment-content deployment-bucket build package delete
+.PHONY: help launch deploy redeploy buckets-remake upload-content cleanup-test-content test cleanup-deployment-content deployment-bucket build package sam-deploy delete
 .DEFAULT_GOAL := run
 
 ## set your profile name as ENVIRONMENT
@@ -13,9 +13,9 @@ launch: deployment-bucket deploy upload-content
 deploy: build package
 	@sceptre launch $(ENVIRONMENT)
 
-redeploy: cleanup-test-content remake-buckets upload-content
+redeploy: cleanup-test-content buckets-remake upload-content
 
-remake-buckets:
+buckets-remake:
 	@sceptre delete $(ENVIRONMENT)/eu/ocp-buckets.yaml
 	@sceptre launch $(ENVIRONMENT)/eu/ocp-buckets.yaml
 
@@ -26,7 +26,6 @@ upload-content:
 	aws s3 cp bucket-content/hello.txt s3://$(ENVIRONMENT)-s3-cleanup-bucket3/hello.txt
 	aws s3 cp bucket-content/real-content.txt s3://$(ENVIRONMENT)-s3-cleanup-bucket4/real-content.txt
 	aws s3 cp bucket-content/hello.txt s3://$(ENVIRONMENT)-s3-cleanup-bucket5/hello.txt
-	aws s3 cp bucket-content/real-content.txt s3://$(ENVIRONMENT)-s3-cleanup-bucket5/real-content.txt
 
 cleanup-test-content:
 	-aws s3 rm s3://$(ENVIRONMENT)-s3-cleanup-bucket1 --recursive
@@ -34,6 +33,9 @@ cleanup-test-content:
 	-aws s3 rm s3://$(ENVIRONMENT)-s3-cleanup-bucket3 --recursive
 	-aws s3 rm s3://$(ENVIRONMENT)-s3-cleanup-bucket4 --recursive
 	-aws s3 rm s3://$(ENVIRONMENT)-s3-cleanup-bucket5 --recursive
+
+test:
+	python3 -m pytest lambdas/
 
 cleanup-deployment-content:
 	aws s3 rm s3://binx-cleanup-lambda --recursive
@@ -52,6 +54,14 @@ package:
 	sam package \
 		--output-template-file templates/s3cleanup.yaml \
 		--s3-bucket $(BUCKET_NAME)
+
+sam-deploy: build package
+	sam deploy --template-file templates/s3cleanup.yaml \
+		--stack-name $(BUCKET_NAME) \
+		--capabilities CAPABILITY_IAM
+
+sam-remove:
+	aws cloudformation delete-stack --stack-name $(BUCKET_NAME)
 
 delete: cleanup-test-content cleanup-deployment-content
 	@sceptre delete $(ENVIRONMENT)

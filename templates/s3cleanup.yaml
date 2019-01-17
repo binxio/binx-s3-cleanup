@@ -12,6 +12,8 @@ Resources:
             Service:
             - lambda.amazonaws.com
         Version: '2012-10-17'
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
       - PolicyDocument:
           Statement:
@@ -23,7 +25,7 @@ Resources:
     Type: AWS::IAM::Role
   S3CleanupLambda:
     Properties:
-      CodeUri: s3://binx-cleanup-lambda/e5a9d1b4bb4f2816e10df05f209eba81
+      CodeUri: s3://binx-cleanup-lambda/4540c6e95064c3ebd9366f390a6ae13a
       Environment:
         Variables:
           REGION: eu-west-1
