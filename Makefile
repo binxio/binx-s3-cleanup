@@ -1,12 +1,9 @@
-.PHONY: help launch deploy redeploy buckets-remake upload-content cleanup-test-content test cleanup-deployment-content deployment-bucket build package sam-deploy delete
-.DEFAULT_GOAL := run
+.PHONY: launch deploy redeploy buckets-remake upload-content cleanup-test-content test cleanup-deployment-content deployment-bucket build package sam-deploy delete
+.DEFAULT_GOAL := test
 
 ## set your profile name as ENVIRONMENT
 ENVIRONMENT = "binx"
 BUCKET_NAME="binx-cleanup-lambda"
-
-help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 launch: deployment-bucket deploy upload-content
 
