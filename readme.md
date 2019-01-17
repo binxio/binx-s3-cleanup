@@ -46,11 +46,11 @@ Events:
         Schedule: rate(1 day)
         Input: '[
                   {
-                    "owner": "ocp",
+                    "owner": "bob",
                     "at": "delete"
                   },
                   {
-                    "owner": "ocp",
+                    "owner": "bob",
                     "prod": "delete"
                   }
                 ]'

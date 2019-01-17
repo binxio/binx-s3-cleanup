@@ -14,7 +14,7 @@ Resources:
       Tags:
         -
           Key: 'owner'
-          Value: 'ocp'
+          Value: 'bob'
         -
           Key: 'at'
           Value: 'deploy'
@@ -26,7 +26,7 @@ Resources:
       Tags:
       -
         Key: 'owner'
-        Value: 'ocp'
+        Value: 'bob'
       -
         Key: 'at'
         Value: 'delete'
@@ -37,7 +37,7 @@ Resources:
       BucketName: !Sub '${Environment}-s3-cleanup-bucket3'
       Tags:
       - Key: 'owner'
-        Value: 'ocp'
+        Value: 'jimmy'
 
   Bucket4:
     Type: AWS::S3::Bucket
