@@ -8,3 +8,4 @@ dist/lambda.zip
 *.swp
 /.aws-sam/
 /.cache/
+/templates/s3cleanup.yaml
