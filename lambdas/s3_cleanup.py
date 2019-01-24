@@ -48,6 +48,30 @@ def remove_buckets(buckets_to_remove):
         bucket.delete()
 
 
+def add_deletion_lifecyle_policy_to_buckets(buckets_to_remove):
+    for bucket in buckets_to_remove:
+        s3_client.put_bucket_lifecycle_configuration(
+            Bucket=bucket,
+            LifecycleConfiguration={
+                'Rules': [
+                    {
+                        'Expiration': {
+                            'Date': 1
+                        },
+                        'ID': 'empty_old_buckets_policy',
+                        'Filter': {
+                            'Prefix': '*'
+                        },
+                        'Status': 'Disabled',
+                        'AbortIncompleteMultipartUpload': {
+                            'DaysAfterInitiation': 1
+                        }
+                    },
+                ]
+            }
+        )
+
+
 def process_tags(event):
     tags = []
 
@@ -65,7 +89,8 @@ def handler(event, _):
         buckets = all_buckets()
         tags = process_tags(event)
         buckets_to_remove = determine_buckets_to_remove(buckets, tags)
-        remove_buckets(buckets_to_remove)
+        add_deletion_lifecyle_policy_to_buckets(buckets_to_remove)
+        # remove_buckets(buckets_to_remove)
 
         return {
             'statusCode': 200,
